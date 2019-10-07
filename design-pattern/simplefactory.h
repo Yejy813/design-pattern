@@ -1,14 +1,14 @@
 #ifndef __SIMPLE_FACTORY_H__
 #define __SIMPLE_FACTORY_H__
 
-/// 产品类型
+/// product type
 enum class PRODUCT_TYPE
 {
     PRODUCT_ABSTRACT,
     PRODUCT_CONCRETE,
 };
 
-/// 产品抽象类
+/// abstract product
 class CAbstractProduct
 {
 public:
@@ -17,7 +17,7 @@ public:
     virtual void operation();
 };
 
-/// 产品子类
+/// concrete product
 class CConcreteProduct : public CAbstractProduct
 {
 public:
@@ -26,7 +26,7 @@ public:
     virtual void operation();
 };
 
-/// 工厂类
+/// factory
 class CFactory
 {
 public:

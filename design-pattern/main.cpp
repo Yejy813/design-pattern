@@ -2,7 +2,7 @@
 
 int main()
 {
-    /// 简单工厂模式
+    /// simple factory pattern
     CFactory factory;
     CAbstractProduct* product = factory.createProduct(PRODUCT_TYPE::PRODUCT_CONCRETE);
     product->operation();
