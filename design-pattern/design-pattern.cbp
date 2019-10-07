@@ -32,6 +32,8 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="factorymethod.cpp" />
+		<Unit filename="factorymethod.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="simplefactory.cpp" />
 		<Unit filename="simplefactory.h" />
