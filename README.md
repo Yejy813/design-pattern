@@ -261,6 +261,238 @@ delete mproduct;
 使用时机：
 在类中有一些泛型处理但是需要在运行时动态地决定所需的子类时是有用的。或者换句话说，当客户机不知道它可能需要什么子类时。
 
+### 抽象工厂
+现实世界的例子：
+> 数据库有多种类型，mysql、oracle 等，数据库内部有多个强相关的组成部分，我们就可以使用一个mysql工厂来创建它的各个组成部分。
+
+简而言之:
+> A factory of factories; a factory that groups the individual but related/dependent factories together without specifying their concrete classes.
+维基百科:
+> 抽象工厂模式提供了一种封装一组具有共同主题的单个工厂的方法，而无需指定它们的具体类。
+
+代码示例：
+abstractfactory.h 文件
+```C++
+/// product
+class CAbstractProductA
+{
+public:
+    virtual ~CAbstractProductA() = 0;
+
+protected:
+    CAbstractProductA();
+};
+
+class CAbstractProductB
+{
+public:
+    virtual ~CAbstractProductB() = 0;
+
+protected:
+    CAbstractProductB();
+};
+
+class CConcreteProductA1 : public CAbstractProductA
+{
+public:
+    ~CConcreteProductA1();
+    CConcreteProductA1();
+};
+
+class CConcreteProductA2 : public CAbstractProductA
+{
+public:
+    ~CConcreteProductA2();
+    CConcreteProductA2();
+};
+
+class CConcreteProductB1 : public CAbstractProductB
+{
+public:
+    ~CConcreteProductB1();
+    CConcreteProductB1();
+};
+
+class CConcreteProductB2 : public CAbstractProductB
+{
+public:
+    ~CConcreteProductB2();
+    CConcreteProductB2();
+};
+
+
+/// factory
+class CAbstractFactory
+{
+public:
+    virtual ~CAbstractFactory() = 0;
+    virtual CAbstractProductA* CreateProductA() = 0;
+    virtual CAbstractProductB* CreateProductB() = 0;
+protected:
+    CAbstractFactory();
+};
+
+class CConcreteFactory1 : public CAbstractFactory
+{
+public:
+    ~CConcreteFactory1();
+    CConcreteFactory1();
+    CAbstractProductA* CreateProductA();
+    CAbstractProductB* CreateProductB();
+};
+
+class CConcreteFactory2 : public CAbstractFactory
+{
+public:
+    ~CConcreteFactory2();
+    CConcreteFactory2();
+    CAbstractProductA* CreateProductA();
+    CAbstractProductB* CreateProductB();
+};
+```
+abstractfactory.cpp 文件
+```C++
+CAbstractProductA::~CAbstractProductA()
+{
+
+}
+
+CAbstractProductA::CAbstractProductA()
+{
+
+}
+
+CAbstractProductB::~CAbstractProductB()
+{
+
+}
+
+CAbstractProductB::CAbstractProductB()
+{
+
+}
+
+CConcreteProductA1::~CConcreteProductA1()
+{
+
+}
+
+CConcreteProductA1::CConcreteProductA1()
+{
+    std::cout << "Abstract factory CConcreteProductA1::ConcreteProductA1()" << std::endl;
+}
+
+CConcreteProductA2::~CConcreteProductA2()
+{
+
+}
+
+CConcreteProductA2::CConcreteProductA2()
+{
+    std::cout << "Abstract factory CConcreteProductA2::CConcreteProductA2()" << std::endl;
+}
+
+CConcreteProductB1::~CConcreteProductB1()
+{
+
+}
+
+CConcreteProductB1::CConcreteProductB1()
+{
+    std::cout << "Abstract factory CConcreteProductB1::CConcreteProductB1()" << std::endl;
+}
+
+CConcreteProductB2::~CConcreteProductB2()
+{
+
+}
+
+CConcreteProductB2::CConcreteProductB2()
+{
+    std::cout << "Abstract factory CConcreteProductB2::CConcreteProductB2()" << std::endl;
+}
+
+
+CAbstractFactory::~CAbstractFactory()
+{
+
+}
+
+CAbstractFactory::CAbstractFactory()
+{
+
+}
+
+CAbstractProductA* CAbstractFactory::CreateProductA()
+{
+    return nullptr;
+}
+
+CAbstractProductB* CAbstractFactory::CreateProductB()
+{
+    return nullptr;
+}
+
+CConcreteFactory1::~CConcreteFactory1()
+{
+
+}
+
+CConcreteFactory1::CConcreteFactory1()
+{
+
+}
+
+CAbstractProductA* CConcreteFactory1::CreateProductA()
+{
+    return new CConcreteProductA1();
+}
+
+CAbstractProductB* CConcreteFactory1::CreateProductB()
+{
+    return new CConcreteProductB1();
+}
+
+CConcreteFactory2::~CConcreteFactory2()
+{
+
+}
+
+CConcreteFactory2::CConcreteFactory2()
+{
+
+}
+
+CAbstractProductA* CConcreteFactory2::CreateProductA()
+{
+    return new CConcreteProductA2();
+}
+
+CAbstractProductB* CConcreteFactory2::CreateProductB()
+{
+    return new CConcreteProductB2();
+}
+```
+客户程序：
+```C++
+/// A and B is related or interdependent
+ABSTRACT_FACTORY::CAbstractFactory* afactory = new ABSTRACT_FACTORY::CConcreteFactory1();
+ABSTRACT_FACTORY::CAbstractProductA* aproductA = afactory->CreateProductA();
+ABSTRACT_FACTORY::CAbstractProductB* aproductB = afactory->CreateProductB();
+delete afactory;
+delete aproductA;
+delete aproductB;
+
+afactory = new ABSTRACT_FACTORY::CConcreteFactory2();
+aproductA = afactory->CreateProductA();
+aproductB = afactory->CreateProductB();
+delete afactory;
+delete aproductA;
+delete aproductB;
+```
+
+使用时机:
+
 ## 结构型设计模式
 
 ## 行为型设计模式

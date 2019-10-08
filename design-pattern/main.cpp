@@ -1,5 +1,6 @@
 #include "simplefactory.h"
 #include "factorymethod.h"
+#include "abstractfactory.h"
 
 int main()
 {
@@ -17,7 +18,22 @@ int main()
     delete mproduct;
 
     /// 3. abstract factory pattern
+    /// A and B is related or interdependent
+    ABSTRACT_FACTORY::CAbstractFactory* afactory = new ABSTRACT_FACTORY::CConcreteFactory1();
+    ABSTRACT_FACTORY::CAbstractProductA* aproductA = afactory->CreateProductA();
+    ABSTRACT_FACTORY::CAbstractProductB* aproductB = afactory->CreateProductB();
+    delete afactory;
+    delete aproductA;
+    delete aproductB;
 
+    afactory = new ABSTRACT_FACTORY::CConcreteFactory2();
+    aproductA = afactory->CreateProductA();
+    aproductB = afactory->CreateProductB();
+    delete afactory;
+    delete aproductA;
+    delete aproductB;
+
+    /// 4. builder
 
     return 0;
 }
