@@ -1,6 +1,16 @@
 #ifndef __SIMPLE_FACTORY_H__
 #define __SIMPLE_FACTORY_H__
 
+/**
+ * This is simple factory pattern
+ * @brief Wrap object creation logic
+ * @time 2019/10/8
+ * @authr yejy
+ */
+
+namespace SIMPLE_FACTORY
+{
+
 /// product type
 enum class PRODUCT_TYPE
 {
@@ -35,4 +45,5 @@ public:
     CAbstractProduct* createProduct(PRODUCT_TYPE eType);
 };
 
+} // namespace SIMPLE_FACTORY
 #endif // __SIMPLE_FACTORY_H__

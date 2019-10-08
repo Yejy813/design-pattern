@@ -18,6 +18,8 @@
 ## 设计模式的类型
 创建型、结构型、行为型
 
+## 设计原则
+
 ## 创建型设计模式
 ### 简单工厂
 现实世界的例子：
@@ -30,6 +32,8 @@
 >在面向对象编程（OOP）中，工厂是用于创建其他对象的对象；形式上，工厂是一种函数或方法，该函数或方法从某个方法调用（假定为“新”）返回不同原型或类的对象。
 
 代码示例：
+
+simplefactory.h 文件
 ```C++
 #ifndef __SIMPLE_FACTORY_H__
 #define __SIMPLE_FACTORY_H__
@@ -71,6 +75,7 @@ public:
 #endif // __SIMPLE_FACTORY_H__
 ```
 
+simplefactory.cpp 文件
 ```C++
 #include "simplefactory.h"
 #include <iostream>
@@ -134,11 +139,12 @@ CAbstractProduct* CFactory::createProduct(PRODUCT_TYPE eType)
 }
 ```
 
+客户程序
 ```
-    /// 简单工厂模式
-    CFactory factory;
-    CAbstractProduct* product = factory.createProduct(PRODUCT_TYPE::PRODUCT_CONCRETE);
-    product->operation();
+/// 简单工厂模式
+CFactory factory;
+CAbstractProduct* product = factory.createProduct(PRODUCT_TYPE::PRODUCT_CONCRETE);
+product->operation();
 ```
 
 使用时机：
@@ -152,7 +158,108 @@ CAbstractProduct* CFactory::createProduct(PRODUCT_TYPE eType)
 > 它提供了一种将实例化逻辑委托给子类的方法。
 
 维基百科:
->在基于类的编程中，工厂方法模式是一种创建模式，该模式使用工厂方法来处理创建对象的问题，而不必指定将要创建的对象的确切类。 这是通过调用工厂方法来创建对象的，而不是通过调用构造函数，该工厂方法在接口中指定并由子类实现，或者在基类中实现，并且可以选择由派生类覆盖。
+>在基于类的编程中，工厂方法模式是一种创建模式，该模式使用工厂方法来处理创建对象的问题，而不必指定将要创建的对象的确切类。这是通过调用工厂方法来创建对象的，而不是通过调用构造函数，该工厂方法在接口中指定并由子类实现，或者在基类中实现，并且可以选择由派生类覆盖。
+
+代码示例：
+factorymethod.h 文件
+```C++
+// product abstract
+class CAbstractProduct
+{
+public:
+    virtual ~CAbstractProduct() = 0;
+
+protected:
+    CAbstractProduct();
+};
+
+// concrete product
+class CConcreteProduct : public CAbstractProduct
+{
+public:
+    ~CConcreteProduct();
+    CConcreteProduct();
+};
+
+// factory abstract
+class CAbstractFactory
+{
+public:
+    virtual ~CAbstractFactory() = 0;
+    virtual CAbstractProduct* CreateProduct() = 0;
+
+protected:
+    CAbstractFactory();
+};
+
+// concrete factory
+class CConcreteFactory : public CAbstractFactory
+{
+public:
+    ~CConcreteFactory();
+    CConcreteFactory();
+    CAbstractProduct* CreateProduct();
+};
+```
+factorymethod.cpp 文件
+```C++
+CAbstractProduct::CAbstractProduct()
+{
+
+}
+
+CAbstractProduct::~CAbstractProduct()
+{
+
+}
+
+CConcreteProduct::CConcreteProduct()
+{
+   std::cout << "factory method CConcreteProduct::CConcreteProduct()" << std::endl;
+}
+
+CConcreteProduct::~CConcreteProduct()
+{
+
+}
+
+CAbstractFactory::CAbstractFactory()
+{
+
+}
+
+CAbstractFactory::~CAbstractFactory()
+{
+
+}
+
+CConcreteFactory::CConcreteFactory()
+{
+
+}
+
+CConcreteFactory::~CConcreteFactory()
+{
+
+}
+
+CAbstractProduct* CConcreteFactory::CreateProduct()
+{
+   return new CConcreteProduct();
+}
+```
+客户程序：
+```C++
+FACTORY_METHOD::CAbstractFactory* mfactory = new FACTORY_METHOD::CConcreteFactory();
+FACTORY_METHOD::CAbstractProduct* mproduct = nullptr;
+/// No need to change
+mproduct = mfactory->CreateProduct();
+delete mfactory;
+delete mproduct;
+```
+
+使用时机：
+在类中有一些泛型处理但是需要在运行时动态地决定所需的子类时是有用的。或者换句话说，当客户机不知道它可能需要什么子类时。
 
 ## 结构型设计模式
 

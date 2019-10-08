@@ -1,6 +1,9 @@
 #include "simplefactory.h"
 #include <iostream>
 
+namespace SIMPLE_FACTORY
+{
+
 CAbstractProduct::CAbstractProduct()
 {
 
@@ -59,3 +62,4 @@ CAbstractProduct* CFactory::createProduct(PRODUCT_TYPE eType)
     return product;
 }
 
+} // namespace SIMPLE_FACTORY
