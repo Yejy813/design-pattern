@@ -32,11 +32,18 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="abstractfactory.cpp" />
+		<Unit filename="abstractfactory.h" />
+		<Unit filename="builder.cpp" />
+		<Unit filename="builder.h" />
 		<Unit filename="factorymethod.cpp" />
 		<Unit filename="factorymethod.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="prototype.cpp" />
+		<Unit filename="prototype.h" />
 		<Unit filename="simplefactory.cpp" />
 		<Unit filename="simplefactory.h" />
+		<Unit filename="singleton.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

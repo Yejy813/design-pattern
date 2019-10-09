@@ -492,6 +492,282 @@ delete aproductB;
 使用时机: 
 当存在相互关联的依赖关系而不涉及简单的创建逻辑时
 
+### 4. 单例模式
+现实世界的例子
+> 一个国家一次只能有一位总统。只要有责任，就必须让同一位总统采取行动。总统是singleton。
+
+简而言之:
+> 确保只创建特定类的一个对象。
+
+维基百科:
+>在软件工程中，单例模式是一种软件设计模式，它将类的实例化限制在一个对象上。当需要一个对象来协调整个系统中的操作时，这非常有用。
+
+单例模式实际上被认为是一种反模式，应该避免过度使用它。它不一定是坏的，可能有一些有效的用例，但是应该谨慎使用，因为它在应用程序中引入了全局状态，在一个地方对其进行更改可能会影响到其他区域，并且可能变得很难调试。另一个不好的地方是，这会使代码紧密耦合，并且很难模拟单例。
+
+`注`: (C++11, GCC > 4.3, VS2015) support Thread-safe Local Static Variables [链接](https://stackoverflow.com/questions/449436/singleton-instance-declared-as-static-variable-of-getinstance-method-is-it-thre/449823#449823)
+
+代码示例：
+```C++
+class CSingleton
+{
+public:
+    static CSingleton& GetInstance();
+    CSingleton(const CSingleton& singleton) = delete;
+    CSingleton& operator=(const CSingleton& singleton) = delete;
+
+private:
+    CSingleton();
+    ~CSingleton();
+};
+
+#define g_refSingleton CSingleton::GetInstance()
+
+/// do not use pointer, So as not to be delete
+CSingleton& CSingleton::GetInstance()
+{
+    static CSingleton instance;
+    return instance;
+}
+
+CSingleton::CSingleton()
+{
+    std::cout << "CSingleton  constructor called! " << std::endl;
+}
+
+CSingleton::~CSingleton()
+{
+    std::cout << "CSingleton  destructor called! " << std::endl;
+}
+```
+
+### 5. 原型模式
+现实世界的例子
+> 还记得多莉吗？克隆的羊！我们先不谈细节，但这里的关键是，一切都是关于克隆的
+
+简而言之
+> 通过克隆来创建基于现有对象的对象。
+
+维基百科:
+> 原型模式是软件开发中一种创造性的设计模式。当要创建的对象类型由一个原型实例确定时，使用该实例，该实例被克隆以生成新对象。
+
+简而言之，它允许您创建现有对象的副本并将其修改为您的需要，而不是从头开始创建对象并设置它的麻烦。
+
+代码示例：
+
+prototype.h文件
+```C++
+class CAbstractPrototype
+{
+public:
+    virtual ~CAbstractPrototype();
+    virtual CAbstractPrototype* clone() = 0;
+
+    inline void SetStatus(int iStatus)
+    {
+        m_iStatus = iStatus;
+    }
+
+    void PrintStatus();
+
+protected:
+    CAbstractPrototype();
+
+private:
+    int m_iStatus;
+};
+
+class CConcretePrototypeA : public CAbstractPrototype
+{
+public:
+    ~CConcretePrototypeA();
+    CConcretePrototypeA();
+    virtual CAbstractPrototype* clone();
+};
+
+class CConcretePrototypeB : public CAbstractPrototype
+{
+public:
+    ~CConcretePrototypeB();
+    CConcretePrototypeB();
+    virtual CAbstractPrototype* clone();
+};
+```
+
+prototype.cpp文件
+```C++
+CAbstractPrototype::CAbstractPrototype()
+{
+
+}
+
+CAbstractPrototype::~CAbstractPrototype()
+{
+
+}
+
+
+CAbstractPrototype* CAbstractPrototype::clone()
+{
+    return nullptr;
+}
+
+void CAbstractPrototype::PrintStatus()
+{
+    std::cout << "prototype pattern, my status: " << m_iStatus << std::endl;
+}
+
+
+CConcretePrototypeA::CConcretePrototypeA()
+{
+
+}
+
+CConcretePrototypeA::~CConcretePrototypeA()
+{
+
+}
+
+CAbstractPrototype* CConcretePrototypeA::clone()
+{
+    return new CConcretePrototypeA(*this);
+}
+
+CConcretePrototypeB::CConcretePrototypeB()
+{
+
+}
+
+CConcretePrototypeB::~CConcretePrototypeB()
+{
+
+}
+
+CAbstractPrototype* CConcretePrototypeB::clone()
+{
+    return new CConcretePrototypeB(*this);
+}
+```
+
+客户程序：
+```C++
+CAbstractPrototype* prototypeA = new CConcretePrototypeA();
+prototypeA->SetStatus(77);
+CAbstractPrototype* prototypeB = prototypeA->clone();
+prototypeB->PrintStatus();
+```
+
+使用时机: 
+当需要一个对象时，该对象与现有对象相似，或者当创建与克隆相比昂贵时。
+
+### 6. 建造者模式
+现实世界的例子
+> 假设您在Hardee's，并订购了一笔特定的交易，比如说“ Big Hardee”，他们会毫无疑问地将其交给您, 这是简单工厂的例子。但是在某些情况下，创建逻辑可能涉及更多步骤。例如，您想要定制的Subway交易，您在汉堡的制作方式上有多种选择，例如，您想要哪种面包？ 您想要哪种调味料？ 您要什么奶酪？ 等等。在这种情况下，构建者模式可以解决。
+
+简而言之
+> 使您可以创建对象的不同样式，同时避免构造函数污染。当一个物体可能有多种口味时很有用。或者在创建对象时涉及很多步骤。
+
+维基百科：
+> builder模式是一种对象创建型软件设计模式，旨在找到伸缩构造函数反模式的解决方案。
+
+
+说到这里，让我补充一下伸缩构造函数反模式是什么。在某种程度上，我们都看到了一个构造函数，如下所示：
+
+```C++
+__construct($size, $cheese = true, $pepperoni = true, $tomato = false, $lettuce = true)
+{
+}
+```
+
+如您所见，构造函数参数的数量可能很快失控，并且可能会变得难以理解参数的排列。另外，如果您将来想添加更多选项，这个参数列表可能会继续增长。这叫做伸缩构造器反模式。
+
+代码示例：
+
+builder.h
+```C++
+class CProduct
+{
+public:
+    CProduct();
+    ~CProduct();
+
+    void SetType(int iType)
+    {
+        m_iType = iType;
+    }
+
+    void SetStatus(int iStatus)
+    {
+        m_iStatus = iStatus;
+    }
+
+    void SetStyle(int iStyle)
+    {
+        m_iStyle = iStyle;
+    }
+
+    void show();
+
+private:
+    int m_iType;
+    int m_iStatus;
+    int m_iStyle;
+};
+
+class CAbstractBuild
+{
+public:
+    virtual ~CAbstractBuild() = 0;
+    virtual void BuildPartA() = 0;
+    virtual void BuildPartB() = 0;
+    virtual void BuildPartC() = 0;
+    CProduct* GetProduct();
+
+protected:
+    CAbstractBuild();
+
+protected:
+    CProduct* m_pProduct;
+};
+
+class CConcreteBuild : public CAbstractBuild
+{
+public:
+    ~CConcreteBuild();
+    CConcreteBuild();
+    void BuildPartA();
+    void BuildPartB();
+    void BuildPartC();
+};
+
+class CDirector
+{
+public:
+    CDirector();
+    ~CDirector();
+
+    void SetBuild(CAbstractBuild* pBuild);
+    CProduct* Construct();
+private:
+    CAbstractBuild* m_pBuild;
+};
+```
+
+客户程序：
+```C++
+CAbstractBuild* build = new CConcreteBuild();
+// No need to change
+CDirector director;
+director.SetBuild(build);
+CProduct* bproduct = director.Construct(); // construct step and create object
+bproduct->show();
+
+delete bproduct;
+delete build;
+```
+
+使用时机: 
+当一个对象可能有几种类型时，为了避免构造器伸缩。与工厂模式的关键区别在于：工厂模式在创建是一步流程时使用，而构建器模式在创建是多步流程时使用。
+
 ## 二. 结构型设计模式
 
 ## 三. 行为型设计模式
