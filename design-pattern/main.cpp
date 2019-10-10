@@ -7,6 +7,10 @@
 
 int main()
 {
+    /***
+     * @brief Creative Design Patterns
+     */
+
     /// 1. simple factory pattern
     SIMPLE_FACTORY::CFactory factory;
     SIMPLE_FACTORY::CAbstractProduct* product = factory.createProduct(SIMPLE_FACTORY::PRODUCT_TYPE::PRODUCT_CONCRETE);
@@ -56,6 +60,17 @@ int main()
 
     delete bproduct;
     delete build;
+
+
+    /***
+     * @brief Structural Design Patterns
+     */
+
+
+    /***
+     * @brief Behavioral Design Patterns
+     */
+
 
     return 0;
 }
