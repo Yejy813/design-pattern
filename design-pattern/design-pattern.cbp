@@ -34,6 +34,8 @@
 		</Compiler>
 		<Unit filename="abstractfactory.cpp" />
 		<Unit filename="abstractfactory.h" />
+		<Unit filename="adapter.cpp" />
+		<Unit filename="adapter.h" />
 		<Unit filename="builder.cpp" />
 		<Unit filename="builder.h" />
 		<Unit filename="factorymethod.cpp" />
