@@ -4,6 +4,7 @@
 #include "builder.h"
 #include "prototype.h"
 #include "singleton.h"
+#include "adapter.h"
 
 int main()
 {
@@ -65,6 +66,14 @@ int main()
     /***
      * @brief Structural Design Patterns
      */
+
+    /// 7. adapter pattern
+    CAdaptee* adaptee = new CAdaptee();
+    CTarget* target = new CAdapter(adaptee);
+    target->Request();
+
+    delete adaptee;
+    delete target;
 
 
     /***

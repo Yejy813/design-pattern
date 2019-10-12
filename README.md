@@ -787,5 +787,69 @@ delete build;
 当一个对象可能有几种类型时，为了避免构造器伸缩。与工厂模式的关键区别在于：工厂模式在创建是一步流程时使用，而构建器模式在创建是多步流程时使用。
 
 ## 结构型设计模式
+简而言之：
+> 结构模式主要关注对象组合，或者换句话说，实体如何相互使用。或者另一种解释是，它们有助于回答“如何构建软件组件？”
 
+维基百科
+> 在软件工程中，结构设计模式是通过识别实现实体之间关系的简单方法来简化设计的设计模式。
+
+- [适配器](#适配器模式)
+
+
+### 适配器模式
+现实世界的例子：
+> 考虑到你的存储卡中有一些图片，你需要将它们传送到你的计算机上。为了传输它们，您需要某种与计算机端口兼容的适配器，以便可以将存储卡连接到计算机。在这种情况下，读卡器是一个适配器。另一个例子是著名的电源适配器；三脚插头不能连接到双脚插座，它需要使用电源适配器，使其与双脚插座兼容。另一个例子是翻译人员把一个人说的话翻译成另一个人说的话。
+
+简而言之：
+> 适配器模式允许您将不兼容的对象包装到适配器中，使其与其他类兼容。
+
+维基百科:
+> 在软件工程中，适配器模式是一种软件设计模式，它允许现有类的接口用作另一个接口。它通常用于使现有类与其他类协同工作而不修改源代码。
+
+代码示例：
+
+adapter.h
+```C++
+/// client will call it
+class CTarget
+{
+public:
+    virtual ~CTarget() = 0;
+    virtual void Request() = 0;
+
+protected:
+    CTarget();
+};
+
+
+class CAdaptee;
+// adapter 组合与继承完成适配
+class CAdapter : public CTarget
+{
+public:
+    ~CAdapter();
+    CAdapter(CAdaptee* adaptee);
+    void Request(); // adapter request
+
+private:
+    CAdaptee* m_pAdaptee;
+};
+
+class CAdaptee
+{
+public:
+    ~CAdaptee();
+     CAdaptee();
+     void specificRequest(); // real request
+};
+```
+客户程序
+```C++
+CAdaptee* adaptee = new CAdaptee();
+CTarget* target = new CAdapter(adaptee);
+target->Request();
+
+delete adaptee;
+delete target;
+```
 ## 行为型设计模式
