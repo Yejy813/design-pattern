@@ -794,7 +794,7 @@ delete build;
 > 在软件工程中，结构设计模式是通过识别实现实体之间关系的简单方法来简化设计的设计模式。
 
 - [适配器](#适配器模式)
-
+- [桥模式](#桥模式)
 
 ### 适配器模式
 现实世界的例子：
@@ -852,4 +852,77 @@ target->Request();
 delete adaptee;
 delete target;
 ```
+### 桥模式
+现实世界的例子:
+考虑您拥有一个包含不同页面的网站，并且应该允许用户更改主题。 你会怎么做？ 为每个主题创建每个页面的多个副本，还是只是创建单独的主题并根据用户的喜好加载它们？ 桥接模式允许您执行第二个操作。
+
+简而言之:
+桥模式是关于更喜欢组合而不是继承。实现细节从一个层次结构推送到另一个具有单独层次结构的对象。
+
+维基百科：
+桥接模式是软件工程中使用的一种设计模式，其目的是“将抽象与其实现分离，以便两者可以独立变化”
+
+`Favor Compsition Over Inheritance`， 组合优于继承，无论是 C++ STL库，还是一般设计中，都会有这种思想，handle/body 就是这种思想，抽象与实现分离。
+
+代码示例：
+
+```C++
+class CAbstraction
+{
+public:
+    virtual ~CAbstraction();
+    virtual void operation() = 0;
+
+protected:
+    CAbstraction();
+};
+
+class CImplementor;
+class CRefinedAbstraction : public CAbstraction
+{
+public:
+    ~CRefinedAbstraction();
+    CRefinedAbstraction(CImplementor* imp);
+    void operation();
+
+private:
+    CImplementor* m_imp;
+};
+
+class CImplementor
+{
+public:
+    virtual ~CImplementor();
+    virtual void operationimp() = 0;
+
+protected:
+    CImplementor();
+};
+
+class CConcreteImplementorA : public CImplementor
+{
+public:
+    ~CConcreteImplementorA();
+    CConcreteImplementorA();
+    void operationimp();
+};
+
+class CConcreteImplementorB : public CImplementor
+{
+public:
+    ~CConcreteImplementorB();
+    CConcreteImplementorB();
+    void operationimp();
+};
+```
+客户程序：
+```C++
+CImplementor* imp = new CConcreteImplementorB();
+CAbstraction* abs = new CRefinedAbstraction(imp);
+abs->operation();
+
+delete imp;
+delete abs;
+```
+
 ## 行为型设计模式

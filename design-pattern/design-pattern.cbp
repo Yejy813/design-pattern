@@ -36,6 +36,8 @@
 		<Unit filename="abstractfactory.h" />
 		<Unit filename="adapter.cpp" />
 		<Unit filename="adapter.h" />
+		<Unit filename="bridge.cpp" />
+		<Unit filename="bridge.h" />
 		<Unit filename="builder.cpp" />
 		<Unit filename="builder.h" />
 		<Unit filename="factorymethod.cpp" />

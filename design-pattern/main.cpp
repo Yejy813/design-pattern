@@ -5,6 +5,7 @@
 #include "prototype.h"
 #include "singleton.h"
 #include "adapter.h"
+#include "bridge.h"
 
 int main()
 {
@@ -75,6 +76,13 @@ int main()
     delete adaptee;
     delete target;
 
+    /// 8. bridge pattern
+    CImplementor* imp = new CConcreteImplementorB();
+    CAbstraction* abs = new CRefinedAbstraction(imp);
+    abs->operation();
+
+    delete imp;
+    delete abs;
 
     /***
      * @brief Behavioral Design Patterns
