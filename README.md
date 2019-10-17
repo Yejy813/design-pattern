@@ -795,6 +795,7 @@ delete build;
 - [桥模式](#桥模式)
 - [组合模式](#组合模式)
 - [装饰者模式](#装饰者模式)
+- [门面模式](#门面模式)
 
 ### 适配器模式
 现实世界的例子：
@@ -1065,4 +1066,57 @@ decorator->Operation();
 delete component;
 delete decorator;
 ```
+### 门面模式
+现实世界的例子:
+> 您如何打开计算机？ 你说“打电源按钮”！ 这就是您所相信的，因为您使用的是计算机在外部提供的简单界面，在内部它必须做很多事情才能实现。 与复杂子系统的这种简单接口是一个外观。
+
+简而言之:
+> 外观模式提供了到复杂子系统的简化接口。
+
+维基百科:
+> 外观是为大型代码（例如类库）提供简化接口的对象。
+
+Fcade 模式在高层组合封装了子系统的接口，解耦了系统。隐藏了子系统的复杂性，使其更易使用。
+
+代码示例：
+
+facade.h
+```C++
+class CSubSystemA
+{
+public:
+    ~CSubSystemA();
+    CSubSystemA();
+    void Operation();
+};
+
+class CSubSystemB
+{
+public:
+    ~CSubSystemB();
+    CSubSystemB();
+    void Operation();
+};
+
+class CFacade
+{
+public:
+    ~CFacade();
+    CFacade();
+    void OperationWrapper();
+
+private:
+    CSubSystemA* m_pSubSystemA;
+    CSubSystemB* m_pSubSystemB;
+};
+```
+
+客户程序：
+```C++
+CFacade* facade = new CFacade();
+facade->OperationWrapper();
+
+delete facade;
+```
+
 ## 行为型设计模式

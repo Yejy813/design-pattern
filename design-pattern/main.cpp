@@ -8,6 +8,7 @@
 #include "bridge.h"
 #include "composite.h"
 #include "decorator.h"
+#include "facade.h"
 
 int main()
 {
@@ -108,6 +109,12 @@ int main()
 
     delete component;
     delete decorator;
+
+    /// 11. facade pattern
+    CFacade* facade = new CFacade();
+    facade->OperationWrapper();
+
+    delete facade;
 
 
     /***
