@@ -10,6 +10,7 @@
 #include "decorator.h"
 #include "facade.h"
 #include "flyweight.h"
+#include "proxy.h"
 
 int main()
 {
@@ -129,6 +130,15 @@ int main()
     fw3->Operation("qian");
 
     delete fwFactory;
+
+    /// 13. proxy pattern
+    CSubject* subject = new CConcreteSubject();
+    CProxy* proxy = new CProxy(subject);
+    proxy->Request();
+
+    delete subject;
+    delete proxy;
+
 
     /***
      * @brief Behavioral Design Patterns

@@ -797,6 +797,7 @@ delete build;
 - [装饰者模式](#装饰者模式)
 - [门面模式](#门面模式)
 - [享元模式](#享元模式)
+- [代理模式](#代理模式)
 
 ### 适配器模式
 现实世界的例子：
@@ -1187,6 +1188,58 @@ fw3->Operation("qian");
 delete fwFactory;
 ```
 ### 代理模式
+现实世界的例子：
+> 您是否曾经使用过门禁卡穿过一扇门？可以通过多种方式打开该门，即可以使用门禁卡或按绕过安全保护的按钮将其打开。门的主要功能是打开，但是在其顶部添加了代理以添加一些功能。让我使用下面的代码示例更好地解释它。
 
+简而言之:
+> 使用代理模式，一个类表示另一个类的功能。
+
+维基百科:
+> 在最一般的形式上，代理是一个类，它充当与其他对象的接口。代理是客户端正在调用的包装器或代理对象，以访问幕后的真实服务对象。代理的使用可以简单地转发到真实对象，也可以提供其他逻辑。在代理中，可以提供额外的功能，例如在对实际对象的操作占用大量资源时进行缓存，或者在对实际对象的操作被调用之前检查先决条件。
+
+Proxy Pattern最大的好处就是实现了逻辑和实现的彻底解耦。
+
+代码示例：
+proxy.h
+```C++
+class CSubject
+{
+public:
+    virtual ~CSubject();
+    virtual void Request() = 0;
+protected:
+    CSubject();
+};
+
+class CConcreteSubject : public CSubject
+{
+public:
+    ~CConcreteSubject();
+    CConcreteSubject();
+    void Request();
+};
+
+class CProxy : public CSubject
+{
+public:
+    ~CProxy();
+    CProxy(CSubject* subject);
+    void Request();
+
+private:
+    CSubject* m_pSubject;
+};
+```
+客户程序：
+```C++
+CSubject* subject = new CConcreteSubject();
+CProxy* proxy = new CProxy(subject);
+proxy->Request();
+
+delete subject;
+delete proxy;
+```
+
+另一个示例是某种数据映射器实现。 例如，最近我使用这种模式为 `MongoDB` 制作了`ODM`（对象数据映射器），其中我在使用魔术方法 `__call（）` 时围绕 `mongo` 类编写了一个代理。 所有方法调用都被代理到原始`mongo`类，并且按原样返回检索到的结果，但是在`find`或`findOne`数据被映射到所需的类对象的情况下，将返回该对象而不是`Cursor`。
 
 ## 行为型设计模式
