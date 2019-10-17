@@ -795,6 +795,7 @@ delete build;
 
 - [适配器](#适配器模式)
 - [桥模式](#桥模式)
+- [组合模式](#组合模式)
 
 ### 适配器模式
 现实世界的例子：
@@ -924,5 +925,83 @@ abs->operation();
 delete imp;
 delete abs;
 ```
+### 组合模式
+现实世界的例子：
+> 每个组织都是由雇员组成的。每个雇员都有相同的特点，即有工资，有一些责任，可能向某人汇报，也可能不向某人汇报，可能有或可能没有下属等。
+
+简而言之：
+> 复合模式允许客户机以统一的方式处理各个对象。
+
+维基百科：
+> 在软件工程中，组合模式是一种分区设计模式。 组合模式描述了要以与对象的单个实例相同的方式对待一组对象。 组合的目的是将对象“组成”树状结构以表示部分整体层次结构。 实施组合模式可使客户统一对待单个对象和构图。
+
+示例代码：
+以我们的员工为例，这里我们有不同的员工类型。
+composite.h文件
+```C++
+#include <vector>
+
+class CEmployee
+{
+public:
+    virtual ~CEmployee();
+    virtual void SetSalary(int iSalary) = 0;
+    virtual int GetSalary() = 0;
+protected:
+    CEmployee(int iSalary);
+
+public:
+    int m_iSalary;
+};
+
+class CDeveloper : public CEmployee
+{
+public:
+    ~CDeveloper();
+    CDeveloper(int iSalary);
+    void SetSalary(int iSalary);
+    int GetSalary();
+};
+
+class CDesign : public CEmployee
+{
+public:
+    ~CDesign();
+    CDesign(int iSalary);
+    void SetSalary(int iSalary);
+    int GetSalary();
+};
+
+class COrganization
+{
+public:
+    ~COrganization();
+    COrganization();
+    void AddEmployee(CEmployee* pEmployee);
+    void DelEmployee(CEmployee* pEmployee);
+    int GetNetSalaries();
+
+private:
+    std::vector<CEmployee*> m_vecEmployee;
+};
+```
+
+客户程序：
+```C++
+CEmployee* design = new CDesign(8000);
+CEmployee* develop = new CDeveloper(12000);
+
+COrganization organization;
+organization.AddEmployee(design);
+organization.AddEmployee(develop);
+
+std::cout << "organization net salary : " << organization.GetNetSalaries() << std::endl;
+organization.DelEmployee(design);
+std::cout << "organization net salary : " << organization.GetNetSalaries() << std::endl;
+
+delete design;
+delete develop;
+```
+
 
 ## 行为型设计模式

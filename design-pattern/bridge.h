@@ -1,6 +1,13 @@
 #ifndef __BRIDGE_H__
 #define __BRIDGE_H__
 
+/***
+ * This is bridge pattern
+ * @brief bridge (handly body)
+ * @time 2019/10/14
+ * @authr yejy
+ */
+
 class CAbstraction
 {
 public:

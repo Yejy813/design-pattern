@@ -6,6 +6,8 @@
 #include "singleton.h"
 #include "adapter.h"
 #include "bridge.h"
+#include "composite.h"
+
 
 int main()
 {
@@ -84,10 +86,25 @@ int main()
     delete imp;
     delete abs;
 
+    /// 9. composite pattern
+    CEmployee* design = new CDesign(8000);
+    CEmployee* develop = new CDeveloper(12000);
+
+    COrganization organization;
+    organization.AddEmployee(design);
+    organization.AddEmployee(develop);
+
+    std::cout << "organization net salary : " << organization.GetNetSalaries() << std::endl;
+    organization.DelEmployee(design);
+    std::cout << "organization net salary : " << organization.GetNetSalaries() << std::endl;
+
+    delete design;
+    delete develop;
+
+
     /***
      * @brief Behavioral Design Patterns
      */
-
 
     return 0;
 }
