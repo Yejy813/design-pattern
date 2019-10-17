@@ -1003,5 +1003,67 @@ delete design;
 delete develop;
 ```
 
+### 装饰者模式
+现实世界的例子:
+> 想象一下，您经营一家提供多种服务的汽车维修店。现在，您如何计算要收取的帐单？您选择一项服务，并动态地不断向其添加所提供服务的价格，直到获得最终成本为止。在这里，每种服务都是装饰器。
 
+简而言之:
+> 装饰器模式使您可以将对象包装在装饰器类的对象中，从而在运行时动态更改对象的行为。
+
+维基百科:
+> 在面向对象的编程中，装饰器模式是一种设计模式，它允许将行为静态或动态地添加到单个对象中，而不会影响同一类中其他对象的行为。装饰器模式通常可用于遵守“单一职责原则”，因为它允许功能在具有唯一关注区域的类之间进行划分。
+
+示例代码：
+decorato.h
+```C++
+ // abstract class
+class CComponent
+{
+public:
+    virtual ~CComponent();
+    virtual void Operation() = 0;
+protected:
+    CComponent();
+};
+
+
+class CConcreteComponent : public CComponent
+{
+public:
+    ~CConcreteComponent();
+    CConcreteComponent();
+    void Operation();
+};
+
+// abstract decorator
+class CDecorator : public CComponent
+{
+public:
+    ~CDecorator();
+    CDecorator(CComponent* comp);
+    virtual void Operation();
+
+public:
+    CComponent* m_Comp;
+};
+
+// decorator add behavior
+class CConcreteDecorator : public CDecorator
+{
+public:
+    ~CConcreteDecorator();
+    CConcreteDecorator(CComponent* comp);
+    void Operation();
+    void AddBehavior();
+};
+```
+客户程序：
+```C++
+CComponent* component = new CConcreteComponent();
+CDecorator* decorator = new CConcreteDecorator(component);
+decorator->Operation();
+
+delete component;
+delete decorator;
+```
 ## 行为型设计模式

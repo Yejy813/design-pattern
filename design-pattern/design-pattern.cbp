@@ -42,6 +42,8 @@
 		<Unit filename="builder.h" />
 		<Unit filename="composite.cpp" />
 		<Unit filename="composite.h" />
+		<Unit filename="decorator.cpp" />
+		<Unit filename="decorator.h" />
 		<Unit filename="factorymethod.cpp" />
 		<Unit filename="factorymethod.h" />
 		<Unit filename="main.cpp" />

@@ -7,7 +7,7 @@
 #include "adapter.h"
 #include "bridge.h"
 #include "composite.h"
-
+#include "decorator.h"
 
 int main()
 {
@@ -100,6 +100,14 @@ int main()
 
     delete design;
     delete develop;
+
+    /// 10. decorator pattern
+    CComponent* component = new CConcreteComponent();
+    CDecorator* decorator = new CConcreteDecorator(component);
+    decorator->Operation();
+
+    delete component;
+    delete decorator;
 
 
     /***
