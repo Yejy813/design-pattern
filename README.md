@@ -796,6 +796,7 @@ delete build;
 - [组合模式](#组合模式)
 - [装饰者模式](#装饰者模式)
 - [门面模式](#门面模式)
+- [享元模式](#享元模式)
 
 ### 适配器模式
 现实世界的例子：
@@ -1118,5 +1119,74 @@ facade->OperationWrapper();
 
 delete facade;
 ```
+### 享元模式
+现实世界的例子：
+> 举个最简单的例子，网络联机下棋的时候，一台服务器连接了多个客户端（玩家），如果我们每个棋子都要创建对象，那一盘棋可能就有上百个对象产生，玩家多点的话，因为内存空间有限，一台服务器就难以支持了，所以这里要使用享元模式，将棋子对象减少到几个实例。下面给出享元模式的定义: 运用共享技术有效地支持大量细粒度的对象。
+
+
+简而言之：
+> 它用于通过与相似对象尽可能多地共享来最大程度地减少内存使用或计算开销。
+
+维基百科：
+> 在计算机编程中，flyweight是一种软件设计模式。 flyweight是通过与其他类似对象共享尽可能多的数据来最大程度减少内存使用的对象。当简单的重复表示使用不可接受的内存量时，这是大量使用对象的方法。
+
+说到享元模式，第一个想到的应该就是池技术了，String常量池、数据库连接池、缓冲池等等都是享元模式的应用，所以说享元模式是池技术的重要实现方式。
+
+代码示例：
+flyweight.h
+```C++
+#include <string>
+#include <vector>
+
+class CFlyWeight
+{
+public:
+    virtual ~CFlyWeight();
+    virtual void Operation(const std::string& strExternalState);
+    std::string GetInternalState();
+
+protected:
+    CFlyWeight(std::string strInternalState);
+
+private:
+    std::string m_strInternalState;
+};
+
+class CConcreteFlyWeight : public CFlyWeight
+{
+public:
+    ~CConcreteFlyWeight();
+    CConcreteFlyWeight(std::string strInternalState);
+    void Operation(const std::string& strExternalState);
+};
+
+class CFlyWeightFactory
+{
+public:
+    ~CFlyWeightFactory();
+    CFlyWeightFactory();
+    CFlyWeight* GetFlyWeight(const std::string& strInternalState);
+
+private:
+    std::vector<CFlyWeight*> m_vecFlyWeight;
+};
+
+```
+客户程序：
+```C++
+CFlyWeightFactory* fwFactory = new CFlyWeightFactory();
+CFlyWeight* fw1 = fwFactory->GetFlyWeight("nihao");
+fw1->Operation("qian");
+
+CFlyWeight* fw2 = fwFactory->GetFlyWeight("zaijian");
+fw2->Operation("qian");
+
+CFlyWeight* fw3 = fwFactory->GetFlyWeight("nihao");
+fw3->Operation("qian");
+
+delete fwFactory;
+```
+### 代理模式
+
 
 ## 行为型设计模式

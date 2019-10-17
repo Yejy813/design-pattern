@@ -48,6 +48,8 @@
 		<Unit filename="facade.h" />
 		<Unit filename="factorymethod.cpp" />
 		<Unit filename="factorymethod.h" />
+		<Unit filename="flyweight.cpp" />
+		<Unit filename="flyweight.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="prototype.cpp" />
 		<Unit filename="prototype.h" />

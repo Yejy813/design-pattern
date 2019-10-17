@@ -9,6 +9,7 @@
 #include "composite.h"
 #include "decorator.h"
 #include "facade.h"
+#include "flyweight.h"
 
 int main()
 {
@@ -116,6 +117,18 @@ int main()
 
     delete facade;
 
+    /// 12. flyweight pattern
+    CFlyWeightFactory* fwFactory = new CFlyWeightFactory();
+    CFlyWeight* fw1 = fwFactory->GetFlyWeight("nihao");
+    fw1->Operation("qian");
+
+    CFlyWeight* fw2 = fwFactory->GetFlyWeight("zaijian");
+    fw2->Operation("qian");
+
+    CFlyWeight* fw3 = fwFactory->GetFlyWeight("nihao");
+    fw3->Operation("qian");
+
+    delete fwFactory;
 
     /***
      * @brief Behavioral Design Patterns
