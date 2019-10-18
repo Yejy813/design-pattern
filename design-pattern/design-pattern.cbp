@@ -40,6 +40,8 @@
 		<Unit filename="bridge.h" />
 		<Unit filename="builder.cpp" />
 		<Unit filename="builder.h" />
+		<Unit filename="chainofresp.cpp" />
+		<Unit filename="chainofresp.h" />
 		<Unit filename="composite.cpp" />
 		<Unit filename="composite.h" />
 		<Unit filename="decorator.cpp" />

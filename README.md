@@ -1243,3 +1243,77 @@ delete proxy;
 另一个示例是某种数据映射器实现。 例如，最近我使用这种模式为 `MongoDB` 制作了`ODM`（对象数据映射器），其中我在使用魔术方法 `__call（）` 时围绕 `mongo` 类编写了一个代理。 所有方法调用都被代理到原始`mongo`类，并且按原样返回检索到的结果，但是在`find`或`findOne`数据被映射到所需的类对象的情况下，将返回该对象而不是`Cursor`。
 
 ## 行为型设计模式
+简而言之：
+> 它与对象之间的职责分配有关。 它们与结构模式的不同之处在于它们不仅指定结构，而且还概述了它们之间消息传递/通信的模式。 换句话说，它们有助于回答“如何在软件组件中运行行为？”。
+
+维基百科:
+> 在软件工程中，行为设计模式是一种设计模式，用于标识对象之间的通用通信模式并实现这些模式。 通过这样做，这些模式增加了执行此通信的灵活性。
+
+- [责任链模式](#责任链模式)
+
+### 责任链模式
+现实世界的例子：
+> 例如，您的帐户中设置了三种付款方式（A，B和C）。 每个都有不同的数量。 A拥有100美元，B拥有300美元，C拥有1000美元，并且选择付款的先后顺序为A，然后B，然后C。您尝试购买价值210美元的商品。 使用责任链，首先将检查帐户A是否可以进行购买，如果可以，则进行购买并且该链将被破坏。 如果不是，则请求将前进到帐户B，如果是的链将被打破，则检查金额，否则请求将继续转发，直到找到合适的处理程序为止。 这里的A，B和C是链条的链接，整个现象就是责任链。
+
+简而言之：
+> 它有助于构建对象链。请求从一端进入，并不断地从一个对象移到另一个对象，直到找到合适的处理程序为止。
+
+维基百科：
+> 在面向对象的设计中，责任链模式是一种由命令对象的源和一系列处理对象组成的设计模式。每个处理对象都包含定义其可以处理的命令对象类型的逻辑。其余的将传递到链中的下一个处理对象。
+
+代码示例：
+翻译上面的帐户示例。 首先，我们有一个基本帐户，该帐户具有将帐户和某些帐户链接在一起的逻辑。
+
+chainofresp.h 文件
+```C++
+#include <string>
+
+class CAccount
+{
+public:
+    virtual ~CAccount();
+    virtual std::string GetAccountName() = 0;
+    void SetNextHandle(CAccount* pHandle);
+    void Pay(int iAmountToPay);
+    bool CanPay(int iAmountToPay);
+
+protected:
+    CAccount(int iBalance);
+
+private:
+    int m_iBalance;
+    CAccount* m_pHandle;
+};
+
+class CBank : public CAccount
+{
+public:
+    CBank(int iBalance);
+    ~CBank();
+    std::string GetAccountName();
+};
+
+class CAliPay : public CAccount
+{
+public:
+    CAliPay(int iBalance);
+    ~CAliPay();
+    std::string GetAccountName();
+};
+```
+
+客户程序：
+```C++
+CAccount* bankaccount = new CBank(1000); // bank balance
+CAccount* alipayaccount = new CAliPay(2000); // alipay balance
+
+bankaccount->SetNextHandle(alipayaccount);
+bankaccount->Pay(1500);
+
+delete alipayaccount;
+delete bankaccount;
+```
+
+输出:
+> CBank Account can not pay it! use next account. 
+> CAliPay Account can pay it! pay 1500 dollors

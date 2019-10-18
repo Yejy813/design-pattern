@@ -11,6 +11,7 @@
 #include "facade.h"
 #include "flyweight.h"
 #include "proxy.h"
+#include "chainofresp.h"
 
 int main()
 {
@@ -138,6 +139,16 @@ int main()
 
     delete subject;
     delete proxy;
+
+    /// 14. chain of responsibility pattern
+    CAccount* bankaccount = new CBank(1000); // bank balance
+    CAccount* alipayaccount = new CAliPay(2000); // alipay balance
+
+    bankaccount->SetNextHandle(alipayaccount);
+    bankaccount->Pay(1500);
+
+    delete alipayaccount;
+    delete bankaccount;
 
 
     /***
