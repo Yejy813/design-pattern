@@ -1250,6 +1250,7 @@ delete proxy;
 > 在软件工程中，行为设计模式是一种设计模式，用于标识对象之间的通用通信模式并实现这些模式。 通过这样做，这些模式增加了执行此通信的灵活性。
 
 - [责任链模式](#责任链模式)
+- [命令模式](#命令模式)
 
 ### 责任链模式
 现实世界的例子：
@@ -1317,3 +1318,71 @@ delete bankaccount;
 输出:
 > CBank Account can not pay it! use next account. 
 > CAliPay Account can pay it! pay 1500 dollors
+
+### 命令模式
+现实世界的例子:
+> 一个通用的示例是您在餐厅订购食物。您（即客户）要求服务员（例如，祈求者）带来一些食物（即命令），服务员将请求简单地转发给知道如何烹饪的厨师（即接收者）。另一个示例是您（即客户端）使用遥控器（“调用者”）打开（即命令）电视（即接收器）。
+
+简而言之:
+> 允许您将动作封装在对象中。该模式背后的关键思想是提供使客户端与接收器解耦的方法。
+
+维基百科:
+> 在面向对象的编程中，命令模式是一种行为设计模式，其中的对象用于封装以后执行动作或触发事件所需的所有信息。该信息包括方法名称，拥有方法的对象和方法参数的值。
+
+代码示例：
+command.h
+```C++
+class CReciever
+{
+public:
+    ~CReciever();
+    CReciever();
+
+    void Action();
+};
+
+class CCommand
+{
+public:
+    ~CCommand();
+    virtual void Excute() = 0;
+protected:
+    CCommand();
+};
+
+class CConcreteCommand : public CCommand
+{
+public:
+    ~CConcreteCommand();
+    CConcreteCommand(CReciever* pRec);
+    void Excute();
+
+private:
+    CReciever* m_pRec;
+};
+
+class CInvoker
+{
+public:
+    ~CInvoker();
+    CInvoker(CCommand* pCommand);
+
+    void Invoke();
+private:
+    CCommand* m_pCommand;
+};
+```
+
+客户程序:
+```C++
+CReciever* rec = new CReciever();
+CCommand* command = new CConcreteCommand(rec);
+CInvoker invoke(command);
+invoke.Invoke();
+
+delete rec;
+delete command;
+```
+
+输出：
+> CConcreteCommand::Excute() . CReciever::Action(). truely action

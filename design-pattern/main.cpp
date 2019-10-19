@@ -12,6 +12,7 @@
 #include "flyweight.h"
 #include "proxy.h"
 #include "chainofresp.h"
+#include "command.h"
 
 int main()
 {
@@ -150,6 +151,14 @@ int main()
     delete alipayaccount;
     delete bankaccount;
 
+    /// 15. command pattern
+    CReciever* rec = new CReciever();
+    CCommand* command = new CConcreteCommand(rec);
+    CInvoker invoke(command);
+    invoke.Invoke();
+
+    delete rec;
+    delete command;
 
     /***
      * @brief Behavioral Design Patterns

@@ -42,6 +42,8 @@
 		<Unit filename="builder.h" />
 		<Unit filename="chainofresp.cpp" />
 		<Unit filename="chainofresp.h" />
+		<Unit filename="command.cpp" />
+		<Unit filename="command.h" />
 		<Unit filename="composite.cpp" />
 		<Unit filename="composite.h" />
 		<Unit filename="decorator.cpp" />
