@@ -13,6 +13,7 @@
 #include "proxy.h"
 #include "chainofresp.h"
 #include "command.h"
+#include "iterator.h"
 
 int main()
 {
@@ -159,6 +160,29 @@ int main()
 
     delete rec;
     delete command;
+
+    /// 16. iterator pattern
+    CAggregate<std::string>* aggregate = new CConcreteAggregate<std::string>();
+    aggregate->Push("11");
+    aggregate->Push("22");
+    aggregate->Push("33");
+    aggregate->Push("44");
+    aggregate->Push("55");
+    aggregate->Push("66");
+
+    std::cout << "aggregate size: " << aggregate->Size() << std::endl;
+    std::cout << "aggregate element: ";
+    CIterator<std::string>* iter = aggregate->CreateIterator();
+
+    for(iter->First(); !iter->IsDone(); iter->Next())
+    {
+        std::cout << iter->CurrentItem() << " ";
+    }
+
+    std::cout << std::endl;
+
+    delete iter;
+    delete aggregate;
 
     /***
      * @brief Behavioral Design Patterns

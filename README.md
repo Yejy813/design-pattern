@@ -1251,6 +1251,7 @@ delete proxy;
 
 - [责任链模式](#责任链模式)
 - [命令模式](#命令模式)
+- [迭代器模式](#迭代器模式)
 
 ### 责任链模式
 现实世界的例子：
@@ -1397,3 +1398,147 @@ delete command;
 维基百科:
 > 在面向对象编程中，迭代器模式是一种设计模式，其中迭代器用于遍历容器并访问容器的元素。迭代器模式将算法与容器分离；在某些情况下，算法必须特定于容器，因此无法分离。
 
+代码示例:
+iterator.h
+```C++
+#include <vector>
+#include <string>
+#include <iostream>
+
+template<class Item>
+class CIterator;
+
+template<class Item>
+class CAggregate
+{
+public:
+    virtual ~CAggregate(){}
+    virtual CIterator<Item>* CreateIterator() = 0;
+    virtual void Pop() = 0;
+    virtual void Push(const Item& value) = 0;
+    virtual int Size() = 0;
+    virtual Item& operator[](int iIndex) = 0;
+};
+
+template<class Item>
+class CConcreteIterator;
+
+template<class Item>
+class CConcreteAggregate : public CAggregate<Item>
+{
+public:
+    ~CConcreteAggregate()
+    {
+
+    }
+
+    CConcreteAggregate()
+    {
+
+    }
+
+    CIterator<Item>* CreateIterator()
+    {
+        return new CConcreteIterator<Item>(this);
+    }
+
+    void Pop()
+    {
+        m_vecItem.pop_back();
+    }
+
+    void Push(const Item& value)
+    {
+        m_vecItem.push_back(value);
+    }
+
+    int Size()
+    {
+        return m_vecItem.size();
+    }
+
+    Item& operator[](int iIndex)
+    {
+        return m_vecItem[iIndex];
+    }
+
+private:
+    std::vector<Item> m_vecItem;
+};
+
+template<class Item>
+class CIterator
+{
+public:
+    virtual ~CIterator(){}
+    virtual void First() = 0;
+    virtual void Next() = 0;
+    virtual bool IsDone() = 0;
+    virtual Item CurrentItem() = 0;
+};
+
+template<class Item>
+class CConcreteIterator : public CIterator<Item>
+{
+public:
+    ~CConcreteIterator(){}
+    CConcreteIterator(CAggregate<Item>* aggregate) : m_Aggregate(aggregate), m_iCurIndex(0){}
+    void First()
+    {
+        m_iCurIndex = 0;
+    }
+
+    void Next()
+    {
+        if(m_iCurIndex < m_Aggregate->Size())
+        {
+            ++m_iCurIndex;
+        }
+    }
+
+    bool IsDone()
+    {
+        if(m_iCurIndex == m_Aggregate->Size())
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    Item CurrentItem()
+    {
+        return (*m_Aggregate)[m_iCurIndex];
+    }
+
+private:
+    int m_iCurIndex;
+    CAggregate<Item>* m_Aggregate;
+};
+```
+
+客户程序：
+```C++
+CAggregate<std::string>* aggregate = new CConcreteAggregate<std::string>();
+aggregate->Push("11");
+aggregate->Push("22");
+aggregate->Push("33");
+aggregate->Push("44");
+aggregate->Push("55");
+aggregate->Push("66");
+
+std::cout << "aggregate size: " << aggregate->Size() << std::endl;
+std::cout << "aggregate element: ";
+CIterator<std::string>* iter = aggregate->CreateIterator();
+
+for(iter->First(); !iter->IsDone(); iter->Next())
+{
+    std::cout << iter->CurrentItem() << " ";
+}
+
+std::cout << std::endl;
+
+delete iter;
+delete aggregate;
+```
+整体类关系，容器类依赖迭代器类，对于迭代器来说，两者关系又是聚合关系。

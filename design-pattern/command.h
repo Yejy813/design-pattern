@@ -21,7 +21,7 @@ public:
 class CCommand
 {
 public:
-    ~CCommand();
+    virtual ~CCommand();
     virtual void Excute() = 0;
 protected:
     CCommand();

@@ -9,65 +9,120 @@
  */
 
 // http://www.voidcn.com/article/p-wfmwbcgi-sg.html
+
+#include <vector>
+#include <string>
+#include <iostream>
+
+template<class Item>
 class CIterator;
 
 template<class Item>
 class CAggregate
 {
 public:
-    virtual ~CAggregate();
-    virtual CIterator begin() = 0;
-    virtual CIterator end() = 0;
-    virtual Item Pop() = 0;
+    virtual ~CAggregate(){}
+    virtual CIterator<Item>* CreateIterator() = 0;
+    virtual void Pop() = 0;
     virtual void Push(const Item& value) = 0;
-protected:
-    CAggregate();
+    virtual int Size() = 0;
+    virtual Item& operator[](int iIndex) = 0;
 };
+
+template<class Item>
+class CConcreteIterator;
 
 template<class Item>
 class CConcreteAggregate : public CAggregate<Item>
 {
 public:
-    ~CConcreteAggregate();
-    CConcreteAggregate();
-    CIterator begin() = 0;
-    CIterator end() = 0;
-    Item Pop();
-    void Push(const Item& value);
+    ~CConcreteAggregate()
+    {
+
+    }
+
+    CConcreteAggregate()
+    {
+
+    }
+
+    CIterator<Item>* CreateIterator()
+    {
+        return new CConcreteIterator<Item>(this);
+    }
+
+    void Pop()
+    {
+        m_vecItem.pop_back();
+    }
+
+    void Push(const Item& value)
+    {
+        m_vecItem.push_back(value);
+    }
+
+    int Size()
+    {
+        return m_vecItem.size();
+    }
+
+    Item& operator[](int iIndex)
+    {
+        return m_vecItem[iIndex];
+    }
 
 private:
-    static const int iMaxSize = 6;
-    Item arr[iMaxSize];
+    std::vector<Item> m_vecItem;
 };
 
 template<class Item>
 class CIterator
 {
 public:
-    virtual ~CIterator();
+    virtual ~CIterator(){}
     virtual void First() = 0;
     virtual void Next() = 0;
     virtual bool IsDone() = 0;
     virtual Item CurrentItem() = 0;
-
-protected:
-    CIterator();
 };
 
 template<class Item>
 class CConcreteIterator : public CIterator<Item>
 {
 public:
-    ~CConcreteIterator();
-    CConcreteIterator();
-    void First();
-    void Next();
-    bool IsDone();
-    Item CurrentItem();
+    ~CConcreteIterator(){}
+    CConcreteIterator(CAggregate<Item>* aggregate) : m_Aggregate(aggregate), m_iCurIndex(0){}
+    void First()
+    {
+        m_iCurIndex = 0;
+    }
+
+    void Next()
+    {
+        if(m_iCurIndex < m_Aggregate->Size())
+        {
+            ++m_iCurIndex;
+        }
+    }
+
+    bool IsDone()
+    {
+        if(m_iCurIndex == m_Aggregate->Size())
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    Item CurrentItem()
+    {
+        return (*m_Aggregate)[m_iCurIndex];
+    }
 
 private:
     int m_iCurIndex;
-    CAggregate<Item> m_Aggregate;
+    CAggregate<Item>* m_Aggregate;
 };
 
 #endif // __ITERATOR_H__
