@@ -14,6 +14,7 @@
 #include "chainofresp.h"
 #include "command.h"
 #include "iterator.h"
+#include "mediator.h"
 
 int main()
 {
@@ -75,6 +76,7 @@ int main()
     /***
      * @brief Structural Design Patterns
      */
+
 
     /// 7. adapter pattern
     CAdaptee* adaptee = new CAdaptee();
@@ -142,6 +144,12 @@ int main()
     delete subject;
     delete proxy;
 
+
+    /***
+     * @brief Behavioral Design Patterns
+     */
+
+
     /// 14. chain of responsibility pattern
     CAccount* bankaccount = new CBank(1000); // bank balance
     CAccount* alipayaccount = new CAliPay(2000); // alipay balance
@@ -184,9 +192,18 @@ int main()
     delete iter;
     delete aggregate;
 
-    /***
-     * @brief Behavioral Design Patterns
-     */
+    /// 17. mediator pattern
+    CChatRoomMediator* mediator = new CChatRoom();
+
+    CUser* userJohn = new CUserJohn("john", mediator);
+    CUser* userJame = new CUserJame("jame", mediator);
+
+    userJohn->SendMessage("Hi there!");
+    userJame->SendMessage("Hey!");
+
+    delete mediator;
+    delete userJohn;
+    delete userJame;
 
     return 0;
 }

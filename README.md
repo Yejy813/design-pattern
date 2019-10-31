@@ -1252,6 +1252,7 @@ delete proxy;
 - [责任链模式](#责任链模式)
 - [命令模式](#命令模式)
 - [迭代器模式](#迭代器模式)
+- [中介者模式](#中介者模式)
 
 ### 责任链模式
 现实世界的例子：
@@ -1542,3 +1543,105 @@ delete iter;
 delete aggregate;
 ```
 整体类关系，容器类依赖迭代器类，对于迭代器来说，两者关系又是聚合关系。
+
+### 中介者模式
+现实世界的例子:
+> 一个普遍的例子是，当你用手机和某人交谈时，你和他们之间有一个网络提供商，你的对话通过它而不是直接发送。在这种情况下，网络提供者是中介者。
+
+简而言之:
+> 中介模式添加一个第三方对象（称为中介）来控制两个对象（称为同事）之间的交互它有助于减少相互通信的类之间的耦合。因为现在他们不需要知道对方的实现。
+
+维基百科:
+> 在软件工程中，中介模式定义了一个对象，该对象封装了一组对象如何交互。这种模式被认为是一种行为模式，因为它可以改变程序的运行行为。
+
+程序示例:
+mediator.h
+```C++
+#ifndef __MEDIATOR_H__
+#define __MEDIATOR_H__
+
+/***
+ * This is mediator pattern
+ * @brief mediator (encapsulates how a set of objects interact)
+ * @time 2019/10/31
+ * @authr yejy
+ */
+
+#include <string>
+
+class CUser;
+class CChatRoomMediator
+{
+public:
+    virtual ~CChatRoomMediator();
+    virtual void ShowMessage(CUser* user, std::string strMessge) = 0;
+
+protected:
+    CChatRoomMediator();
+};
+
+class CChatRoom : public CChatRoomMediator
+{
+public:
+    ~CChatRoom();
+    CChatRoom();
+    void ShowMessage(CUser* user, std::string strMessge);
+};
+
+
+class CUser
+{
+public:
+    virtual ~CUser();
+    virtual void SendMessage(std::string strMessge) = 0;
+    virtual std::string GetName() = 0;
+
+protected:
+    CUser(std::string strName, CChatRoomMediator* pChat);
+
+public:
+    std::string m_strName;
+    CChatRoomMediator* m_pChat;
+};
+
+class CUserJohn : public CUser
+{
+public:
+    ~CUserJohn();
+    CUserJohn(std::string strName, CChatRoomMediator* pChat);
+    void SendMessage(std::string strMessge);
+    std::string GetName();
+};
+
+class CUserJame : public CUser
+{
+public:
+    ~CUserJame();
+    CUserJame(std::string strName, CChatRoomMediator* pChat);
+    void SendMessage(std::string strMessge);
+    std::string GetName();
+};
+
+#endif // __MEDIATOR_H__
+```
+
+客户程序：
+```C++
+CChatRoomMediator* mediator = new CChatRoom();
+
+CUser* userJohn = new CUserJohn("john", mediator);
+CUser* userJame = new CUserJame("jame", mediator);
+
+userJohn->SendMessage("Hi there!");
+userJame->SendMessage("Hey!");
+
+delete mediator;
+delete userJohn;
+delete userJame;
+```
+
+打印:
+```c++
+[john]: Hi there!
+[jame]: Hey!
+```
