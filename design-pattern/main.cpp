@@ -15,6 +15,7 @@
 #include "command.h"
 #include "iterator.h"
 #include "mediator.h"
+#include "memento.h"
 
 int main()
 {
@@ -204,6 +205,22 @@ int main()
     delete mediator;
     delete userJohn;
     delete userJame;
+
+    /// 18. memento pattern
+    CEdit* edit = new CEdit("past!");
+    edit->PrintStatus();
+
+    CEditMemento* memento = edit->CreateMemento();
+
+    edit->SetStatus("now!");
+    edit->PrintStatus();
+
+    edit->restore(memento);
+    std::cout << "restore:" << std::endl;
+    edit->PrintStatus();
+
+    delete memento;
+    delete edit;
 
     return 0;
 }

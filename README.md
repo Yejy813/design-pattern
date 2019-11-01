@@ -1253,6 +1253,7 @@ delete proxy;
 - [命令模式](#命令模式)
 - [迭代器模式](#迭代器模式)
 - [中介者模式](#中介者模式)
+- [备忘录模式](#备忘录模式)
 
 ### 责任链模式
 现实世界的例子：
@@ -1644,4 +1645,75 @@ delete userJame;
 ```c++
 [john]: Hi there!
 [jame]: Hey!
+```
+
+### 备忘录模式
+现实世界的例子：
+> 以计算器（即发起者）为例，当您执行某个计算时，最后一个计算将保存在内存（即纪念品）中，这样您就可以返回它，并可能使用一些操作按钮（即管理员）恢复它。
+
+简而言之：
+> 备忘录模式是一种捕捉和存储对象当前状态的方式，它可以在以后以一种平滑的方式恢复。
+
+维基百科:
+> memento模式是一种软件设计模式，它提供了将对象还原到其先前状态（通过回滚撤消）的能力。
+
+通常在需要提供某种撤消功能时很有用。
+
+代码示例：
+memento.h
+```C++
+#include <string>
+
+class CEditMemento
+{
+public:
+    CEditMemento(std::string strStatus);
+    ~CEditMemento();
+
+    std::string GetStatus();
+
+private:
+    std::string m_strStatus;
+};
+
+class CEdit
+{
+public:
+    CEdit(std::string strStatus);
+    ~CEdit();
+
+    CEditMemento* CreateMemento();
+    void restore(CEditMemento* pMemento);
+
+    void PrintStatus();
+    void SetStatus(std::string strStatus);
+
+private:
+    std::string m_strStatus;
+};
+```
+
+客户程序：
+```C++
+CEdit* edit = new CEdit("past!");
+edit->PrintStatus();
+
+CEditMemento* memento = edit->CreateMemento();
+
+edit->SetStatus("now!");
+edit->PrintStatus();
+
+edit->restore(memento);
+std::cout << "restore:" << std::endl;
+edit->PrintStatus();
+
+delete memento;
+delete edit;
+```
+代码输出：
+```C++
+edit status: past!
+edit status: now!
+restore:
+edit status: past!
 ```
