@@ -60,6 +60,8 @@
 		<Unit filename="mediator.h" />
 		<Unit filename="memento.cpp" />
 		<Unit filename="memento.h" />
+		<Unit filename="observer.cpp" />
+		<Unit filename="observer.h" />
 		<Unit filename="prototype.cpp" />
 		<Unit filename="prototype.h" />
 		<Unit filename="proxy.cpp" />

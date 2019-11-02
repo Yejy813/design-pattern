@@ -1254,6 +1254,7 @@ delete proxy;
 - [迭代器模式](#迭代器模式)
 - [中介者模式](#中介者模式)
 - [备忘录模式](#备忘录模式)
+- [观察者模式](#观察者模式)
 
 ### 责任链模式
 现实世界的例子：
@@ -1717,3 +1718,114 @@ edit status: now!
 restore:
 edit status: past!
 ```
+
+### 观察者模式
+
+现实世界的例子：
+> 一个很好的例子就是求职者订阅了一些招聘网站，只要有匹配的工作机会，他们就会收到通知。
+
+简而言之:
+> 定义对象之间的依赖关系，以便在对象更改其状态时通知其所有依赖项。
+
+维基百科:
+> 观察者模式是一种软件设计模式，在这种模式中，一个名为subject的对象维护其从属对象（称为观察者）的列表，并自动通知它们任何状态更改，通常是通过调用它们的一个方法。
+
+程序示例：
+observer.h
+```C++
+class CObserver;
+class CObserverSubject
+{
+public:
+    virtual ~CObserverSubject();
+    virtual void Attach(CObserver* observer);
+    virtual void Detach(CObserver* observer);
+    virtual void Notify();
+    virtual void SetStatus(std::string strStatus) = 0;
+    virtual std::string GetStatus() = 0;
+
+protected:
+    CObserverSubject();
+
+private:
+    std::vector<CObserver*> m_vecObserver;
+};
+
+class CConcreteObserverSubject : public CObserverSubject
+{
+public:
+    CConcreteObserverSubject();
+    ~CConcreteObserverSubject();
+
+    void SetStatus(std::string strStatus);
+    std::string GetStatus();
+
+private:
+    std::string m_strStatus;
+};
+
+
+class CObserver
+{
+public:
+    virtual ~CObserver();
+    virtual void Update() = 0;
+    std::string GetStatus();
+
+protected:
+    CObserver(std::string strStatus);
+
+public:
+    std::string m_strStatus;
+};
+
+class CConcreteObserverA : public CObserver
+{
+public:
+    CConcreteObserverA(std::string strStatus);
+    ~CConcreteObserverA();
+
+    void Update();
+};
+
+class CConcreteObserverB : public CObserver
+{
+public:
+    CConcreteObserverB(std::string strStatus);
+    ~CConcreteObserverB();
+
+    void Update();
+};
+```
+
+客户程序:
+```C++
+CObserver* observerA = new CConcreteObserverA("excited");
+CObserver* observerB = new CConcreteObserverB("sad");
+
+CObserverSubject* observerSubject = new CConcreteObserverSubject();
+
+observerSubject->Attach(observerA);
+observerSubject->Attach(observerB);
+
+observerSubject->SetStatus("sad");
+observerSubject->Notify();
+
+observerSubject->SetStatus("excited");
+observerSubject->Notify();
+
+observerSubject->Detach(observerA);
+observerSubject->Notify();
+
+delete observerB;
+delete observerA;
+delete subject;
+```
+
+程序输出：
+```C++
+CConcreteObserverB Update() status: sad
+CConcreteObserverA Update() status: excited
+no observer match
+```
+

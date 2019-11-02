@@ -16,6 +16,7 @@
 #include "iterator.h"
 #include "mediator.h"
 #include "memento.h"
+#include "observer.h"
 
 int main()
 {
@@ -221,6 +222,28 @@ int main()
 
     delete memento;
     delete edit;
+
+    /// 19. observer pattern
+    CObserver* observerA = new CConcreteObserverA("excited");
+    CObserver* observerB = new CConcreteObserverB("sad");
+
+    CObserverSubject* observerSubject = new CConcreteObserverSubject();
+
+    observerSubject->Attach(observerA);
+    observerSubject->Attach(observerB);
+
+    observerSubject->SetStatus("sad");
+    observerSubject->Notify();
+
+    observerSubject->SetStatus("excited");
+    observerSubject->Notify();
+
+    observerSubject->Detach(observerA);
+    observerSubject->Notify();
+
+    delete observerB;
+    delete observerA;
+    delete subject;
 
     return 0;
 }
