@@ -17,6 +17,7 @@
 #include "mediator.h"
 #include "memento.h"
 #include "observer.h"
+#include "visitor.h"
 
 int main()
 {
@@ -243,7 +244,25 @@ int main()
 
     delete observerB;
     delete observerA;
-    delete subject;
+    delete observerSubject;
+
+    /// 20. visitor pattern
+    CAniaml* monkey = new CMonkey();
+    CAniaml* Lion = new CLion();
+
+    CAniamlOperation* speak = new CSpeakOperation();
+    CAniamlOperation* jump = new CJumpOperation();
+
+    monkey->Accept(speak);
+    monkey->Accept(jump);
+
+    Lion->Accept(speak);
+    Lion->Accept(jump);
+
+    delete monkey;
+    delete Lion;
+    delete speak;
+    delete jump;
 
     return 0;
 }

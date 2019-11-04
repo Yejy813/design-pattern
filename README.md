@@ -1255,6 +1255,7 @@ delete proxy;
 - [中介者模式](#中介者模式)
 - [备忘录模式](#备忘录模式)
 - [观察者模式](#观察者模式)
+- [访问者模式](#访问者模式)
 
 ### 责任链模式
 现实世界的例子：
@@ -1819,7 +1820,7 @@ observerSubject->Notify();
 
 delete observerB;
 delete observerA;
-delete subject;
+delete observerSubject;
 ```
 
 程序输出：
@@ -1829,3 +1830,99 @@ CConcreteObserverA Update() status: excited
 no observer match
 ```
 
+### 访问者模式
+现实世界的例子:
+> 想想有人去迪拜。他们只需要一种方式（即签证）就可以进入迪拜。抵达后，他们可以自己来迪拜的任何地方参观，而无需申请许可或做一些腿部工作，以便参观这里的任何地方；只要让他们知道一个地方，他们就可以参观，访问者模式允许您这样做，它可以帮助您添加要访问的地方，以便他们可以访问尽可能多的，而不必做任何遗留工作。
+
+简而言之:
+> visitor 模式允许您向对象添加进一步的操作，而无需修改它们。
+
+维基百科：
+> 在面向对象编程和软件工程中，访问者设计模式是一种将算法与其操作的对象结构分离的方法。这种分离的实际结果是在不修改这些结构的情况下向现有对象结构添加新操作的能力。这是遵循开/闭原则的一种方法。
+
+
+程序示例:
+让我们举一个动物园模拟的例子，我们有几种不同的动物，我们必须让它们听起来像。让我们使用visitor模式来翻译这个。
+
+visitor.h
+```C++
+class CAniamlOperation; // visitor
+class CAniaml
+{
+public:
+    virtual ~CAniaml();
+    virtual void shout() = 0;
+    virtual void Accept(CAniamlOperation* operation) = 0;
+
+protected:
+    CAniaml();
+};
+
+class CMonkey : public CAniaml
+{
+public:
+    CMonkey();
+    ~CMonkey();
+    void shout();
+    void Accept(CAniamlOperation* operation);
+};
+
+class CLion : public CAniaml
+{
+public:
+    CLion();
+    ~CLion();
+    void shout();
+    void Accept(CAniamlOperation* operation);
+};
+
+// visitor
+class CAniamlOperation
+{
+public:
+    virtual ~CAniamlOperation();
+    virtual void visitMonkey(CAniaml* monkey) = 0;
+    virtual void visitLion(CAniaml* lion) = 0;
+
+protected:
+    CAniamlOperation();
+};
+
+class CSpeakOperation : public CAniamlOperation
+{
+public:
+    ~CSpeakOperation();
+    CSpeakOperation();
+    void visitMonkey(CAniaml* monkey);
+    void visitLion(CAniaml* lion);
+};
+
+class CJumpOperation : public CAniamlOperation
+{
+public:
+    ~CJumpOperation();
+    CJumpOperation();
+    void visitMonkey(CAniaml* monkey);
+    void visitLion(CAniaml* lion);
+};
+```
+
+客户程序：
+```C++
+CAniaml* monkey = new CMonkey();
+CAniaml* Lion = new CLion();
+
+CAniamlOperation* speak = new CSpeakOperation();
+CAniamlOperation* jump = new CJumpOperation();
+
+monkey->Accept(speak);
+monkey->Accept(jump);
+
+Lion->Accept(speak);
+Lion->Accept(jump);
+
+delete monkey;
+delete Lion;
+delete speak;
+delete jump;
+```
