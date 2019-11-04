@@ -69,6 +69,10 @@
 		<Unit filename="simplefactory.cpp" />
 		<Unit filename="simplefactory.h" />
 		<Unit filename="singleton.h" />
+		<Unit filename="state.cpp" />
+		<Unit filename="state.h" />
+		<Unit filename="strategy.cpp" />
+		<Unit filename="strategy.h" />
 		<Unit filename="visitor.cpp" />
 		<Unit filename="visitor.h" />
 		<Extensions>

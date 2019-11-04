@@ -19,6 +19,7 @@
 #include "observer.h"
 #include "visitor.h"
 #include "strategy.h"
+#include "state.h"
 
 int main()
 {
@@ -272,6 +273,16 @@ int main()
 
     delete strategyA;
     delete context;
+
+    /// 22. state pattern
+    CState* stateA = new CConcreteStateA();
+    CStateContext* stateContext = new CStateContext(stateA);
+
+    stateContext->Request();
+    stateContext->Request();
+    stateContext->Request();
+
+    delete stateContext;
 
     return 0;
 }

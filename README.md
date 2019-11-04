@@ -2003,5 +2003,85 @@ Algorithm A
 ```
 
 ### 状态模式
+现实世界的例子：
+> 假设您正在使用某个绘图应用程序，请选择要绘制的画笔。现在，画笔根据所选颜色改变其行为，即如果您选择了红色，画笔将以红色绘制，如果是蓝色，则画笔将以蓝色绘制等。
+
+简单地说:
+> 它允许您在状态更改时更改类的行为。
+
+维基百科:
+> 状态模式是一种以面向对象的方式实现状态机的行为软件设计模式。使用状态模式，状态机通过将每个单独的状态实现为状态模式接口的派生类，并通过调用模式的超类定义的方法来实现状态转换状态模式可以解释为一种策略模式，它能够通过调用模式接口中定义的方法来切换当前策略。
+
+程序示例:
+state.h
+```C++
+class CStateContext;
+class CState
+{
+public:
+    virtual ~CState();
+    virtual void Handle(CStateContext* context) = 0;
+
+protected:
+    CState();
+};
+
+class CConcreteStateA : public CState
+{
+public:
+    ~CConcreteStateA();
+    CConcreteStateA();
+    void Handle(CStateContext* context);
+};
+
+class CConcreteStateB : public CState
+{
+public:
+    ~CConcreteStateB();
+    CConcreteStateB();
+    void Handle(CStateContext* context);
+};
+
+class CConcreteStateC : public CState
+{
+public:
+    ~CConcreteStateC();
+    CConcreteStateC();
+    void Handle(CStateContext* context);
+};
+
+
+class CStateContext
+{
+public:
+    ~CStateContext();
+    CStateContext(CState* state);
+
+    void Request();
+    void SetState(CState* state);
+
+private:
+    CState* m_state;
+};
+```
+客户程序：
+```C++
+CState* stateA = new CConcreteStateA();
+CStateContext* stateContext = new CStateContext(stateA);
+
+stateContext->Request();
+stateContext->Request();
+stateContext->Request();
+
+delete stateContext;
+```
+
+程序输出：
+```C++
+CConcreteStateA
+CConcreteStateB
+CConcreteStateC
+```
 
 ### 模板方法模式
+
