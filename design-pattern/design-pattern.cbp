@@ -69,6 +69,8 @@
 		<Unit filename="simplefactory.cpp" />
 		<Unit filename="simplefactory.h" />
 		<Unit filename="singleton.h" />
+		<Unit filename="visitor.cpp" />
+		<Unit filename="visitor.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
