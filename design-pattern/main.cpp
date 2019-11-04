@@ -18,6 +18,7 @@
 #include "memento.h"
 #include "observer.h"
 #include "visitor.h"
+#include "strategy.h"
 
 int main()
 {
@@ -263,6 +264,14 @@ int main()
     delete Lion;
     delete speak;
     delete jump;
+
+    /// 21. strategy pattern
+    CStrategy* strategyA = new CConcreteStrategyA();
+    CContext* context = new CContext(strategyA);
+    context->DoAction();
+
+    delete strategyA;
+    delete context;
 
     return 0;
 }

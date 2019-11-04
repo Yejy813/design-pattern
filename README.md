@@ -1256,6 +1256,9 @@ delete proxy;
 - [备忘录模式](#备忘录模式)
 - [观察者模式](#观察者模式)
 - [访问者模式](#访问者模式)
+- [策略模式](#策略模式)
+- [状态模式](#状态模式)
+- [模板方法模式](#模板方法模式)
 
 ### 责任链模式
 现实世界的例子：
@@ -1926,3 +1929,79 @@ delete Lion;
 delete speak;
 delete jump;
 ```
+
+程序输出：
+```C++
+Ooh oo aa aa!
+Jumped 20 feet high! on to the tree!
+Roaaar!
+Jumped 7 feet! Back on the ground!
+```
+### 策略模式
+现实世界的例子：
+> 以排序为例，我们实现了bubble sort，但是数据开始增长，bubble sort开始变得非常缓慢。为了解决这个问题，我们实现了快速排序。但现在，尽管快速排序算法在处理大型数据集方面做得更好，但在处理较小的数据集方面却很慢。为了处理这个问题，我们实现了一种策略，对于小数据集，将使用气泡排序，对于较大的，快速排序。
+
+简而言之：
+> 策略模式允许您根据情况切换算法或策略。
+
+维基百科：
+> 在计算机程序设计中，策略模式（也称为策略模式）是一种行为软件设计模式，它允许在运行时选择算法的行为。
+
+程序示例：
+strategy.h
+```C++
+class CStrategy
+{
+public:
+    virtual ~CStrategy();
+    virtual void AlgorithmInterface() = 0;
+
+protected:
+    CStrategy();
+};
+
+class CConcreteStrategyA : public CStrategy
+{
+public:
+    ~CConcreteStrategyA();
+    CConcreteStrategyA();
+    void AlgorithmInterface();
+};
+
+class CConcreteStrategyB : public CStrategy
+{
+public:
+    ~CConcreteStrategyB();
+    CConcreteStrategyB();
+    void AlgorithmInterface();
+};
+
+class CContext
+{
+public:
+    ~CContext();
+    CContext(CStrategy* strategy);
+    void DoAction();
+
+private:
+    CStrategy* m_strategy;
+};
+```
+
+客户程序：
+```C++
+CStrategy* strategyA = new CConcreteStrategyA();
+CContext* context = new CContext(strategyA);
+context->DoAction();
+
+delete strategyA;
+delete context;
+```
+程序输出:
+```C++
+Algorithm A
+```
+
+### 状态模式
+
+### 模板方法模式
