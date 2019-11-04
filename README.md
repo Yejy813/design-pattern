@@ -2084,4 +2084,80 @@ CConcreteStateC
 ```
 
 ### 模板方法模式
+现实世界的例子:
+> 假设我们正在盖房子。建造的台阶可能看起来像
+> + 准备房屋地基
+> + 筑墙
+> + 添加屋顶
+> + 添加其他楼层
+
+> 这些台阶的顺序永远不会改变，也就是说，你不能在建造墙壁之前建造屋顶等，但每个台阶都可以修改，例如墙壁可以由木头、聚酯或石头制成。
+
+简而言之：
+> 模板方法定义了如何执行某个算法的框架，但将这些步骤的实现推迟到子类。
+
+维基百科:
+> 在软件工程中，模板方法模式是一种行为设计模式，它定义了操作中算法的程序框架，将一些步骤推迟到子类。它允许在不改变算法结构的情况下重新定义算法的某些步骤。
+
+程序示例:
+
+假设我们有一个构建工具，可以帮助我们测试、lint、build、生成构建报告（即代码覆盖率报告、linting报告等）并在测试服务器上部署我们的应用程序。
+
+首先，我们有一个基类，它指定构建算法的框架。
+template.h
+```C++
+class CBuilder
+{
+public:
+    virtual ~CBuilder();
+
+    void build();
+    virtual void test() = 0;
+    virtual void lint() = 0;
+    virtual void assemble() = 0;
+    virtual void deploy() = 0;
+
+protected:
+    CBuilder();
+};
+
+class CAndroidBuilder : public CBuilder
+{
+public:
+    ~CAndroidBuilder();
+    CAndroidBuilder();
+
+    void test();
+    void lint();
+    void assemble();
+    void deploy();
+};
+
+class CIOSBuilder : public CBuilder
+{
+public:
+    ~CIOSBuilder();
+    CIOSBuilder();
+
+    void test();
+    void lint();
+    void assemble();
+    void deploy();
+};
+```
+客户程序：
+```C++
+CBuilder* templateBuild = new CAndroidBuilder();
+templateBuild->build();
+
+delete templateBuild;
+```
+
+程序输出：
+```C++
+Running android tests
+Linting the android code
+Assembling the android build
+Deploying android build to server
+```
 

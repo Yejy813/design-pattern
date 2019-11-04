@@ -20,6 +20,7 @@
 #include "visitor.h"
 #include "strategy.h"
 #include "state.h"
+#include "template.h"
 
 int main()
 {
@@ -283,6 +284,12 @@ int main()
     stateContext->Request();
 
     delete stateContext;
+
+    /// 23. template pattern
+    CBuilder* templateBuild = new CAndroidBuilder();
+    templateBuild->build();
+
+    delete templateBuild;
 
     return 0;
 }
